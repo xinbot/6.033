@@ -1,0 +1,146 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf460
+{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fmodern\fcharset0 Courier;\f2\fnil\fcharset0 Monaco;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11440\viewh13200\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs32 \cf0 \expnd0\expndtw0\kerning0
+Question 1:
+\b0  Indicate what percentage of packets sent resulted in a successful response. For the packets from which you received a response, write down the minimum, average, and maximum round trip times in milliseconds. \
+	
+\f1\fs26 www.csail.mit.edu : 90.0% successful package response\
+					  min/avg/max = 436.094/484.310/522.434 ms\
+	www.berkeley.edu : 90% successful package response\
+					min/avg/max = 181.175/184.178/191.118 ms\
+	www.unsw.edu.au : 100% successful package response\
+					min/avg/max = 368.115/436.667/499.313 ms\
+	www.kyoto-u.ac.jp
+\f0\fs32  
+\f1\fs26 : 80% successful package response\
+					min/avg/max = 379.748/478.846/616.202 ms
+\f0\fs32 \
+\
+
+\b Question 2:
+\b0  Explain the differences in minimum round trip time to each of these hosts.\
+	These servers are placed at different geolocation. Some may far from where I issues my ping command, others may relatively closer. So this makes the minimum round trip time different from one another. 		\
+\
+
+\b Question 3:
+\b0  Now send pings with 56, 512, 1024 and 2056 byte packets to 
+\f1\fs26 www.csail.mit.edu
+\f0\fs32 . (Hint: read about the 
+\f1\fs26 -s
+\f0\fs32  flag on the ping man page.) Write down the average round trip times in milliseconds for each of the four groups. Do the same for 
+\f1\fs26 www.kyoto-u.ac.jp
+\f0\fs32 . Explain the changes in round-trip times that you observed (or didn't observe) in both cases.\
+	
+\f1\fs26 www.csail.mit.edu : size : min/avg/max\
+					  56    436.094/484.310/522.434 ms\
+					  512   389.069/450.738/510.258 ms\
+					  1024  393.829/464.698/510.967 ms\
+					  2056  cannot receive any package response\
+\
+	www.kyoto-u.ac.jp : size : min/avg/max\
+					  56    379.748/478.846/616.202 ms\
+					  512   438.286/502.296/628.870 ms\
+					  1024  497.956/556.930/611.104 ms\
+					  2056  497.582/537.834/577.788 ms\
+	We can observe that the round trip time for larger packages tend to increase. Because packets with larger sizes take slightly longer time to travel across the network.\
+\
+
+\f0\b\fs32 Question 4:
+\b0  For some of the hosts, you may not have received any responses for the packets you sent. What are some reasons as to why you might have not gotten a response? (Be sure to check the hosts in a web browser.)\
+
+\f1\fs26 	For www.microsoft.com I got 98.0% successful package response while for www.wits.ac.za I got 0.0%. There could be couple of reasons for this. The remote server firewall may only granted remote http access. Another reason maybe that some address forward you to other IP addressed on the client, but ping is unable to see the forwarding.\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs32 \cf0 Question 5:
+\b0  In at most 50 words, explain how traceroute discovers a path to a remote host. The man page might be useful in answering this question.\
+	The trace route command launches UDP probe packets with small ttl and cause an ICMP \'93time exceeded\'94 reply to be sent from the router. This reply message identifies the router and by increasing the ttl by one the packets can reach the next router in the sequence and have a reply message sent back from that router. \
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs26 \cf0 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs32 \cf0 Question 6:
+\b0  Show the output of traceroute from each direction above.\
+	From Stanford:\
+\pard\tx566\tx1133\pardeftab720\partightenfactor0
+
+\f1\fs26 \cf0 Executing exec(traceroute -m 30 -q 3 113.105.12.160)\
+traceroute to 113.105.12.160 (113.105.12.160), 30 hops max, 40 byte packets\
+ 1  rtr-servcore1-serv01-webserv.slac.stanford.edu (134.79.197.130)  0.873 ms  0.720 ms  0.674 ms\
+ 2  rtr-core2-p2p-serv01-01.slac.stanford.edu (134.79.254.65)  0.507 ms  0.438 ms  0.400 ms\
+ 3  rtr-fwcore1-trust-p2p-core1.slac.stanford.edu (134.79.254.134)  0.843 ms  0.814 ms  0.679 ms\
+ 4  rtr-core1-p2p-fwcore1-untrust.slac.stanford.edu (134.79.254.137)  0.911 ms  0.784 ms  0.951 ms\
+ 5  * * rtr-border1-p2p-core2.slac.stanford.edu (134.79.252.137)  5.078 ms\
+ 6  rtr-border2-p2p-border1.slac.stanford.edu (192.68.191.253)  1.603 ms  1.401 ms  1.384 ms\
+ 7  sunncr5-ip-c-slac.slac.stanford.edu (192.68.191.233)  1.765 ms  1.785 ms  1.665 ms\
+ 8  eqxsjrt1-ip-a-sunncr5.es.net (134.55.38.146)  1.931 ms  1.865 ms  1.808 ms\
+ 9  v307.core1.sjc2.he.net (66.220.6.249)  8.450 ms  1.878 ms  1.946 ms\
+10  66.220.23.190 (66.220.23.190)  3.336 ms chinatelecom.10gigabitethernet4-3.core1.sjc2.he.net (64.71.131.130)  5.552 ms 64.71.151.214 (64.71.151.214)  3.253 ms\
+11  202.97.58.129 (202.97.58.129)  194.455 ms  192.371 ms  191.528 ms\
+12  * * *\
+13  202.97.35.201 (202.97.35.201)  202.652 ms 202.97.35.253 (202.97.35.253)  191.925 ms *\
+14  202.97.33.169 (202.97.33.169)  202.643 ms 202.97.33.217 (202.97.33.217)  192.582 ms *\
+15  * 61.144.3.9 (61.144.3.9)  191.328 ms  191.004 ms\
+16  58.61.243.138 (58.61.243.138)  189.316 ms 183.56.31.142 (183.56.31.142)  203.455 ms  202.639 ms\
+17  * * *\
+18  * * *\
+19  * * *\
+20  * * *\
+21  * * *\
+22  * * *\
+23  * * *\
+24  * * *\
+25  * * *\
+26  * * *\
+27  * * *\
+28  * * *\
+29  * * *\
+30  * * *
+\f0\fs32 \
+\pard\pardeftab720\partightenfactor0
+\cf0 \
+
+\b Question 7:
+\b0  Describe anything unusual about the output. Are the same routers traversed in both directions? If not, why might this happen?\
+	The same routers are not traversed in both directions. Because some link along the path could have failed.\
+\
+
+\b Question 8:
+\b0  Show the output of the above command. Describe what is strange about the observed output, and why traceroute gives you such an output. Refer to the traceroute man page for useful hints.\
+\pard\pardeftab720\partightenfactor0
+
+\f2\fs26 \cf2 \kerning1\expnd0\expndtw0 \CocoaLigature0 	traceroute to 18.31.0.200 (18.31.0.200), 64 hops max, 52 byte packets\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural\partightenfactor0
+\cf2  	 1  bogon (172.31.27.254)  4.011 ms !N  3.054 ms !N  2.903 ms !N 
+\f1 \cf0 \expnd0\expndtw0\kerning0
+\CocoaLigature1 \
+\pard\pardeftab720\partightenfactor0
+\cf0 	Network unreachable.\
+\
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs32 \cf0 Question 9:
+\b0  From the path entry data, which Autonomous System (AS) number corresponds to MIT?\
+	The system number i corresponds to MIT because its s the final code to all paths to the 18.0.0.0 network. \
+\
+
+\b Question 10:
+\b0  What are the Autonomous System (AS) numbers of each AS which advertises a direct link to MIT?\
+	The number 3 because 3 is the only path that leads to i, which is MIT.\
+\
+
+\b Question 11:
+\b0  How long did it take you to complete this hands-on? Tell us here:\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs26 \cf0 	Two and a half hours. 
+\f0\fs32 \
+\
+}

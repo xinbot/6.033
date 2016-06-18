@@ -1,0 +1,176 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf460
+{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fmodern\fcharset0 Courier-Bold;\f2\fmodern\fcharset0 Courier;
+}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12700\viewh12020\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs32 \cf0 \expnd0\expndtw0\kerning0
+Question 1:
+\b0  A listing of all processes that 
+\i you
+\i0  are currently running on the Athena machine you are using, sorted by the command name in alphabetical order. The output should consist 
+\i only
+\i0  of the processes you are running, and nothing else.	\
+	
+\f1\b ps -o comm -u linxin -c | sort
+\f0 \
+\
+	Question 2:
+\b0  The number of words in the file 
+\f1\b\fs26 /usr/share/dict/words
+\f0\b0\fs32  (*) which do not contain any of the letters a, e, i, o, or u. [* Note: On some Unix/Linux systems, the dictionary has the filename 
+\b /usr/dict/words
+\b0 ]\
+	
+\f1\b cat /usr/share/dict/words | grep -w \'91[^aeiou]*\'92 | wc -c
+\f0\b0 \
+\
+	
+\b Question 3:
+\b0  A 
+\f2\fs26 5x6
+\f0\fs32  matrix of entries of alternating 
+\f2\fs26 1's
+\f0\fs32  and 
+\f2\fs26 0's
+\f0\fs32 . It should look like this:\
+
+\f2\fs26 	1 0 1 0 1\
+	0 1 0 1 0\
+	1 0 1 0 1\
+	0 1 0 1 0\
+	1 0 1 0 1\
+	0 1 0 1 0\
+	
+\f1\b\fs32 yes \'931 0\'94 | fat -10 | head -6
+\f0 \
+\
+	Question 4:
+\b0  A "long" listing of the smallest 5 files in the 
+\f1\b\fs26 /etc
+\f0\b0\fs32  directory whose name contains the string ".conf", sorted by 
+\i increasing
+\i0  file size.\
+	
+\f1\b ls -lSr /etc/ | grep \'91.conf\'92 | head -5\
+\
+	
+\f0 Question 5:
+\b0  \
+	The second command doesn\'92t work because access to /etc directory is denied. Redirect command \'91>\'92 cannot create file \'91temp\'92 in /etc. Some negative side affects are one might overwrite a file already named temp and the file temp created by the second command need to be explicitly deleted otherwise it will remain on the disk.\
+\
+	
+\b Question 6:
+\b0  Compare the two temp files. Based on your understanding of file I/O in UNIX, what is going on here, and why? Is this different from what you would expect? \
+	For temp3 the two processes run sequentially, namely that process2 starts until process1 has finished. For temp4 two processes start running simultaneously, causing the output to be intervening. \
+\
+	
+\b Question 7:
+\b0  The paper describes the Unix system call interface in some detail. In particular, the 
+\f2\fs26 read
+\f0\fs32  and 
+\f2\fs26 write
+\f0\fs32  system calls do not take the offset as an argument. Why did the Unix designers not include the offset as an argument to 
+\f2\fs26 read
+\f0\fs32  and 
+\f2\fs26 write
+\f0\fs32 ? How would an application write to a specific offset in a file?\
+	Because the filesystem is stored as a number of files linked together inside of a block. Therefore, it would be extremely difficult to seek a particular offset without reading through the file one memory block at a time. Thus, it doesn't provide any extra functionality to have the offset as an argument. To write to a specific offset, one would first have to seek and set the cursor to a specific offset, then write to the file.\
+\
+	
+\b Question 8:
+\b0  Change to the '.' entry in your new directory. What happens to your working directory? Next, change to the '..' entry. What happens to your working directory?\
+	'.'  refers to the current directory. '..' refers to the parent directory.\
+\
+	
+\b Question 9:
+\b0  Describe a scenario where you might need to use the '.' directory.\
+	One might want to copy a directory into the currently directory like 
+\f1\b cp foo .\
+\
+	
+\f0 Question 10:
+\b0  What has changed in the stat output and why has it changed?\
+	The access, modify and change timestamps. Because the directory has been accessed, modified and changed by creating two new files \'93foo\'94 and \'93bar\'94.\
+\
+	
+\b Question 11:
+\b0  What has changed in the stat output this time and why has it changed? Why does the link count only change when you create a new directory?\
+	The link count as well as access, modify and change timestamps. Because the newly created file contains a link \'92..\'92 which refers to the parent directory. This makes the link count of parent directory increment by one.    \
+	\
+	
+\b Question 12:
+\b0  One reason for supporting symbolic links is to allow linking from one disk to another disk, but you can also create a symbolic link to a file on the same disk. Name one advantage and one disadvantage of using symbolic links on the same disk.\
+	Advantage: Can create links that refer to file far down the directory tree.\
+	Disadvantage: Can create dangling link. \
+\
+	
+\b Question 13:
+\b0  What happened? Why?\
+	I am end up in my home directory. This happened because the 
+\f1\b cd
+\f0\b0  command sent me up one directory to /mit, then changed the directory to /mit/linxin, which allowed me to get to my home directory. \
+\
+	
+\b Question 14:
+\b0  You can reach the 6.033 locker with the path 
+\f2\fs26 /afs/athena.mit.edu/course/6/6.033
+\f0\fs32 . Why does Athena also provide the 
+\f2\fs26 /mit/6.033
+\f0\fs32  symbolic link?\
+	Making user navigate file system more easily. 	\
+\
+
+\b 	Question 15:
+\b0  How would you change the file system to make this command (
+\f2\fs26 cd /mit/6.033; cd ../YOUR_USERNAME
+\f0\fs32 ) actually change to your home directory?\
+	Change /mit to the home folder of athena. \
+\
+	
+\b Question 16:
+\b0  What happened to 
+\f2\fs26 ls
+\f0\fs32 ? Why isn't it listing files like it did before?\
+	There was a bash script named \'93ls\'94 which overwrote the built-in ls command. This is because the first path inside of the PATH variable was the working directory, so it ended up running the bash script which was defined inside of the current working directory. \
+\
+	
+\b Question 17:
+\b0  What does 1 represent in the first argument of 
+\f2\fs26 write
+\f0\fs32 ?\
+	The 1 is the output file descriptor to which the contents of the buffer will be written.\
+
+\b 	\
+	Question 18:
+\b0  How long did this assignment take you to complete up to this point?\
+	Two hours. \
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+\
+	\
+		\
+\
+\
+\
+\
+\
+	}

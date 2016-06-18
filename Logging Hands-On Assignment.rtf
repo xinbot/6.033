@@ -1,0 +1,82 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf460
+{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fmodern\fcharset0 Courier-Bold;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs32 \cf0 \expnd0\expndtw0\kerning0
+Question 1:
+\b0  
+\i Wal-sys
+\i0  displays the current state of the database contents after you type 
+\f1\b\fs26 show_state
+\f0\b0\fs32 . Why doesn't the database show 
+\i studentB
+\i0 ?\
+	When we typed the crash command, the action 2 which create information about studentB hasn\'92t committed.  		\
+\
+
+\b Question 2:
+\b0  When the database recovers, which accounts should be active, and what values should they contain?\
+	The studentA and studentB account should be active. Because the transfer actions on both studentA and studentB are committed, the studentA account contains 900 and studentB account contains 3100.\
+\
+
+\b Question 3:
+\b0  Can you explain why the "DB" file does not contain a record for 
+\i studentC
+\i0  and contains the pre-debit balance for 
+\i studentA
+\i0 ?\
+	Creating action 3 and committing it all happened inside the transaction 2, which hasn\'92t committed yet when the system crashed.\
+\
+\pard\pardeftab720\partightenfactor0
+
+\b \cf0 Question 4:
+\b0  What do you expect the state of "DB" to be after 
+\i wal-sys
+\i0  recovers after this new crash? Why?\
+	I expect the state of \'93DB\'94 to hold the value of studentA and studentC. After the recovery the \'93DB\'94 will hold any value that was committed.\
+\
+
+\b Question 5:
+\b0  Run 
+\i wal-sys
+\i0  again to recover the database. Examine the "DB" file. Does the state of the database match your expectations? Why or why not?\
+	Yes, the state of the database match my expectations. Because the recovery did bring back everything that was committed.\
+\
+
+\b Question 6:
+\b0  During recovery, 
+\i wal-sys
+\i0  reports the 
+\i action_id
+\i0 s of those recoverable actions that are "Losers", "Winners", and "Done". What is the meaning of these categories?\
+	The winners are the set of all-or-nothing actions that logged an outcome status before the crash. The losers are the set of all-or-nothing actions that were still in progress at the time of crash. The done gives all actions that were finished and committed before the crash.\
+\
+
+\b Question 7:
+\b0  Why are the results of recoverable action 2's 
+\f1\b\fs26 create_account 2 studentB 2000
+\f0\b0\fs32  command not installed in "DB" by the 
+\f1\b\fs26 checkpoint
+\f0\b0\fs32  command on the following line?\
+	Because at that time action 2 had not yet been committed, so it didn\'92t include in the checkpoint.\
+\
+
+\b Question 8:
+\b0  How many lines were rolled back? What is the advantage of using checkpoints?\
+	There are 6 lines were rolled back. The advantage of using checkpoints is that the recovery doesn\'92t need to roll all the way back to the starting point. It can stop rolling back once encounter a checkpoint.\
+\
+
+\b Question 9:
+\b0  Does the second run of the recovery procedure (for sequence 2) restore "DB" to the same state as the first run? What is this property called?\
+	Yes. This property is called idempotence.\
+\
+
+\b Question 10
+\b0 : Compare the 
+\i action_id
+\i0 s of "Winners", "Losers", and "Done" from the second recovery with those from the first. The lists are different. How does the recovery procedure guarantee the property from Question 9 even though the recovery procedure can change? (Hint: Examine the "LOG" file).\
+	The first recovery writes an END to all actions which are marked with loser, and transforms the loser into a completed action. This prevents future updates from incorrectly undoing updates to the actions. The process of finishing al loser actions in volatile storage makes sure that recovery process is idempotent even when the log changes.\
+}

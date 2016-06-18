@@ -1,0 +1,131 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf460
+{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fmodern\fcharset0 Courier;\f2\fmodern\fcharset0 Courier-Bold;
+}
+{\colortbl;\red255\green255\blue255;\red0\green0\blue0;\red0\green0\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs32 \cf0 \expnd0\expndtw0\kerning0
+Question 1.
+\b0  At this point, we decide to generate a list of all accounts in the first (blue) terminal, and in the second (red) terminal. What output do you expect to get? Are they the same or not? Why? Format your answer as a table with rows and columns.\
+	I expect the two terminals output not the same result. Because the transaction in the second terminal haven\'92t committed yet, its inserted record won\'92t be seen by the first terminal.\
+	Output from first terminal:\
+	
+\f1\fs26 \cf2 username=> 
+\f2\b select * from accounts;
+\f1\b0 \
+ 	username |     fullname     | balance \
+	---------+------------------+---------\
+ 	bitdiddl | Ben Bitdiddle    |      65\
+	alyssa   | Alyssa P. Hacker |      79\
+ 	jones    | Alice Jones      |      72\
+ 	mike     | Michael Dole     |      83\
+	(4 rows)\cf3 \
+	
+\f0\fs32 \cf0 Output from second terminal:\
+		
+\f1\fs26 username=> 
+\f2\b select * from accounts;
+\f1\b0 \
+ 	username |     fullname     | balance \
+	---------+------------------+---------\
+ 	bitdiddl | Ben Bitdiddle    |      65\
+	alyssa   | Alyssa P. Hacker |      79\
+ 	jones    | Alice Jones      |      72\
+ 	mike     | Michael Dole     |      83\
+	chunk    | Charles Robinson |	   55\
+	(4 rows)\
+\
+
+\f0\b\fs32 Question 2.
+\b0  Now we go back to terminal 1 (blue) and regenerate the list of accounts (reproduced below, again by using 
+\f1\fs26 select
+\f0\fs32 ). You can see the terminal output below. Why is Chuck's account not there?\
+	Because the first terminal is still in the state of transaction. \
+\
+
+\b Question 3.
+\b0  Now we commit the transaction in the first (blue) terminal and generate a new list of all accounts again:\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs26 \cf2 username=> 
+\f2\b commit;
+\f1\b0 \
+COMMIT\
+username=> 
+\f2\b select * from accounts;
+\f1\b0 \
+...\
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs32 \cf0 What output do you expect to see? Is it different than the output we received in exercise 2? Why or why not?\
+	I expect the newly inserted record will appear in the resulting table. It is different than the output we received in exercise 2. Because the the first terminal has committed its transaction.\
+\
+
+\b Question 4.
+\b0  What would you expect to happen to the execution of the second update? Why?\
+	The second update stops and blocks forever. Because the first update has\'92t committed so the transaction prevents you from updating the balance until the first transaction commits or aborts.\
+\
+
+\b Question 5.
+\b0  Let's say now we 
+\f1\fs26 ABORT
+\f0\fs32  command in the first (blue) terminal, undoing the $5 deposit:\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs26 \cf2 username=> 
+\f2\b abort;
+\f1\b0 \
+ROLLBACK\
+username=> \cf3 \
+\pard\pardeftab720\partightenfactor0
+
+\f0\fs32 \cf0 What would you expect would happen now? What happens to the second (red) terminal's transactions? What if we commit in the second (red) terminal? What would you expect to see in Mike's account?\
+	The effects cause by the first terminal will be rolled back. The second terminal updates the account information successfully, which subtract $10 from mike\'92s account.\
+\
+
+\b Question 6.
+\b0  Now we finish the transfer by executing the following commands in the second (red) terminal. At which command do you expect to the effects of the second terminal's transaction to become visible in the first terminal. Why?\
+	The commit command. Because a transaction is a atomic action, its effects will only be seen after it committed.\
+\
+
+\b Question 7:
+\b0  Are the balances in 
+\f1\fs26 ./tmp/a
+\f0\fs32  and 
+\f1\fs26 ./tmp/b
+\f0\fs32  equal?\
+	Yes, balances in the two temporary files are equal.\
+\
+
+\b Question 8:
+\b0  The clients are printing error messages. What does the error message mean? Why is it printing an error message? (You need to study 
+\f1\fs26 clnt.py
+\f0\fs32  to answer this question.)\
+	The error messages mean that the set of results from one pass over the set of servers contains more than one item. It prints this error message because two clients connect to a server. Since a server responses both clients with a result, which will end up more than one results in the result list.\
+\
+
+\b Question 9:
+\b0  We have given you the skeleton of the coordinator, and you need to complete it so that clients don't print error messages. A correct run can complete the following script without printing any error messages:\
+\pard\pardeftab720\partightenfactor0
+
+\f1\fs26 \cf0   top% ./srv.py ./tmp/a &\
+  Listening on port xxxxx ...\
+\
+  top% ./srv.py ./tmp/b &\
+  Listening on port yyyyy ...\
+\
+  top% ./coord.py xxxxx yyyyy\
+  Listening on port zzzzz ...\
+\
+  bottom% ./clnt.py zzzzz &\
+  bottom% ./clnt.py zzzzz &\
+  bottom% jobs\
+\
+  (let it run for a while)\
+\
+  bottom% kill %1\
+  bottom% kill %2\
+ 	Check the coord.py file.\
+	}

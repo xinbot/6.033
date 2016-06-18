@@ -1,0 +1,61 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf460
+{\fonttbl\f0\froman\fcharset0 Times-Roman;\f1\fmodern\fcharset0 Courier;}
+{\colortbl;\red255\green255\blue255;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww12460\viewh10880\viewkind0
+\deftab720
+\pard\pardeftab720\partightenfactor0
+
+\f0\b\fs32 \cf0 \expnd0\expndtw0\kerning0
+Question 1:
+\b0  Study 
+\f1\fs26 helgrind
+\f0\fs32 's output and the 
+\f1\fs26 ph.c
+\f0\fs32  program. Clearly something is wrong with 
+\f1\fs26 put()
+\f0\fs32  on line 61. Why are there missing keys with 2 or more threads, but not with 1 thread?\
+	The method put is not guarded by any lock. When two or more threads trying to set a open entry\'92s key and value to the key and value passed by the caller the race condition can occurred. Consider two threads running simultaneously, thread A and B respectively. Thread A and B have found that entry i is unused. After thread A setting the key and value the thread B still sees the entry i as unused. Thread B will also set the key and value in entry i. At the end of execution thread B overwrites the key and value set by thread A.\
+\
+
+\b Question 2:
+\b0  Describe your changes and argue why these changes ensure correctness.\
+	I added a new lock named put_lock, which must be acquired while changing an entry in hash table. If an unused entry is found, the put method will acquire the lock using the pthread_mutex_lock method. After the method acquiring the lock it confirm that the entry is still unused. If the entry is still unused, change the key and value in the hash table and release the lock using the pthread_mutex_unlock method right before the return statement. This locking mechanism ensure the detecting whether an entry is unused and changing of key and value are all execute sequentially. Thus prevent the race condition.\
+
+\f1\fs26 \
+
+\f0\b\fs32 Question 3:
+\b0  Is the two-threaded version faster than the single-threaded version in the put phase? Report the running times for the two-threaded version and the single-threaded version.\
+	The two-threaded version indeed faster than the single-threaded version. The two-threaded version runs in an average of 1.62 seconds (10 trials ), while the single-threaded version runs in an average of 2.68 seconds (10 trials).\
+\
+
+\b Question 4:
+\b0  Most likely (depending on your exact changes) 
+\f1\fs26 ph
+\f0\fs32  won't achieve any speedup. Why is that?\
+	Achievement of speedup requires sophisticated usage of locking. Suppose you acquire and release lock after open curly braces and before close curly braces in the put method. The result of this won\'92t achieve any speedup. Because this restricts the loop checking to only one thread. We can place the lock acquirement when we meet an unused entry(after the if statement ), which makes looping concurrently. \
+\
+
+\b Question 5:
+\b0  You should observe speedup on several cores for the 
+\f1\fs26 get
+\f0\fs32  phase of 
+\f1\fs26 ph
+\f0\fs32 . Why is that?\
+	The threads don\'92t have to wait to acquire a lock before reading through their tables. Acquiring and releasing locks both take times. Now, instead of obtaining a lock every time a get is called, there is no lock.  \
+\
+
+\b Question 6:
+\b0  Why does 
+\f1\fs26 valgrind
+\f0\fs32  report no errors for 
+\f1\fs26 get()
+\f0\fs32 ?\
+	Because the get method does not modify the table. Thus even if two threads reading a variable at the some time (or very close times), neither of the reads will be affected by the other read. This guaranteed get method can be thread safe without a lock. \
+\
+
+\f1\fs26 \
+\
+\
+\
+\
+}

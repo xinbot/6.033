@@ -1,0 +1,53 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1404\cocoasubrtf460
+{\fonttbl\f0\froman\fcharset0 Times-Roman;}
+{\colortbl;\red255\green255\blue255;\red38\green38\blue38;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww10800\viewh8400\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural\partightenfactor0
+
+\f0\b\fs32 \cf0 Question 1:
+\b0  what are the IP addresses of maple and willow on this network?\
+	The IP address of willow is 128.30.4.222 and for maple is 128.30.4.22. This can be obtained by adding \'93-n\'94 option which means do not convert addresses.\
+\
+
+\b Question 2:
+\b0  A TCP connection runs not just between two machines, but between two specific ports on those machines. What ports are used in the connection between willow and maple?\
+	The port use for connection on willow is port 39675 while on maple is port 5001. This can be tell by looking at the tail portion attach to the two machine\'92s IP addresses.\
+\
+
+\b Question 3: 
+\b0 How many kilobytes were transferred during this TCP session, and how long did it last? Based on these numbers, what is the throughput (in kiloBytes/sec) of this TCP flow between willow and maple?\
+	There were 1,572,890 bytes, that is 1572.890 kiloBytes, transferred during this TCP session. Because the largest asked sequence number was 1,572,890, which measure in bytes.  The time interval of this TCP session is from 12:34:41.473036 to 12:34:44.339015 and it is 2.866 secs. Thus the throughput is 1572.890 kiloBytes / 2.886 secs = 548.810 kiloBytes / secs\
+\
+
+\b Question 4:
+\b0  What is the round-trip time (RTT) in seconds, between willow and maple, based on packet 1473:2921 and its acknowledgment? Look at outfield.txt and find the round-trip time of packet 13057:14505. Why are the two values different?\
+	Packet 1473:2921 was sent at 00:34:41.474225 and received at 00:34:41.482047, the elapse time was 0.007822 seconds. The RRT for packet 13057:14505 was 0.024381 seconds. \cf2 \expnd0\expndtw0\kerning0
+The reason for this is because the 1473:2921 packet was sent in the initial startup and it was one of the first packets to get sent. Because of this, it was received by the receiver pretty quickly after it was sent and an ack was sent quickly as well. However, for packet 13057:14505, the packet had to wait for the queue of packets before it to be processed before the ack could be sent.\cf0 \kerning1\expnd0\expndtw0   \
+\
+
+\b Question 5:
+\b0  Approximately how many outstanding packets could this connection support without causing queues to grow?\
+	During time 5s to 9s the number of outstanding packets is approximately same at around 370. This means that queues at this time interval is not likely to grow.\
+\
+
+\b Question 6:
+\b0  At what times during this connection was TCP in a slow-start phase? For each phase, also explain why TCP was in slow-start.\
+	During time 0.6s to 10s, 10.7s to 16s and 17.3s to 19.7s, the TCP was in slow-start phase. We can see that during these time interval the number of outstanding packets is grow slowly. This connection may previously experiences packet losses or reaching of slow start threshold that causes the sender to slowed down the outgoing rate and enter into slow start initial phase.\
+\
+
+\b Question 7:
+\b0  At what times in the graph, if any, did packets loss likely occur? For which of these losses (again, if any) did TCP enter fast-retransmit/fast-recovery? \
+	There are three time intervals that are likely to occur packet losses, namely 0.5~0.6, 10~10.5 and 16.0 ~ 16.6. Judging from the graph we learn that during these time intervals the number of outstanding packets is fluctuating (changing rapidly), it is likely that packet losses cause sender to adjust the sending rate. The FRR did occur during these time intervals. Because the network was experience some rapid increase and decrease of the number of packets outstanding.\
+\
+\pard\pardeftab720\partightenfactor0
+
+\b \cf0 \expnd0\expndtw0\kerning0
+Question 8:
+\b0  TCP CUBIC's increase function is slightly different than the additive increase you saw in class. If CUBIC used an additive increase function, would any portion(s) of this graph look different? If so, which portion(s), and why?\
+	Portions that indicate the occurrence of packet losses may look different. Additive increase will reduce the transmission rate by a multiplicative factor, which result in saw-tooth diagram instead. \kerning1\expnd0\expndtw0 \
+
+\itap1\trowd \taflags0 \trgaph108\trleft-108 \trbrdrt\brdrnil \trbrdrl\brdrnil \trbrdrt\brdrnil \trbrdrr\brdrnil 
+\clvertalc \clshdrawnil \clwWidth15320\clftsWidth3 \clmart10 \clmarl10 \clmarb10 \clmarr10 \clbrdrt\brdrnil \clbrdrl\brdrnil \clbrdrb\brdrnil \clbrdrr\brdrnil \clpadt20 \clpadl20 \clpadb20 \clpadr20 \gaph\cellx8640
+\pard\intbl\itap1\pardeftab720\partightenfactor0
+\cf0 	\cell \lastrow\row
+}
